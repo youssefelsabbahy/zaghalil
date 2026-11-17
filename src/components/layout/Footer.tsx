@@ -2,7 +2,7 @@
 
 import { AnimatePresence, motion, useScroll, useTransform } from "framer-motion";
 import { useRef, useState } from "react";
-import { contact, footer } from "@/content/site";
+import { contact, footer, waDigits } from "@/content/site";
 import { asset } from "@/lib/assets";
 import { useStore } from "@/lib/store";
 import { isEmail, submitForm } from "@/lib/forms";
@@ -106,7 +106,7 @@ export function Footer() {
                   {DEMO ? (
                     <span dir="ltr">{contact.phone}</span>
                   ) : (
-                    <a href={`https://wa.me/2${contact.phone}`} target="_blank" rel="noreferrer" className="underline decoration-white/40 underline-offset-4 hover:decoration-white" dir="ltr">
+                    <a href={`https://wa.me/${waDigits(contact.phone)}`} target="_blank" rel="noreferrer" className="underline decoration-white/40 underline-offset-4 hover:decoration-white" dir="ltr">
                       {contact.phone}
                     </a>
                   )}

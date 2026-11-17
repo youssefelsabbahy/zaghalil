@@ -223,6 +223,9 @@ export const testimonials = {
   ],
 };
 
+/** Digits only, for wa.me links. */
+export const waDigits = (phone: string) => phone.replace(/\D/g, "");
+
 export const contact = {
   eyebrow: "تعالى نتكلم",
   inviteTitle: "يلا بينا، عالم زغاليل في انتظارك",
@@ -231,8 +234,9 @@ export const contact = {
   fields: { name: "الاسم كامل", email: "ايميلك", message: "اكتب طلبك", messagePh: "احكيلنا فكرتك" },
   submit: "ابعتلنا",
   maxLength: 250,
-  phone: "01023446788",
-  email: "Hello@Zaghalil.Com",
+  // Demo contact details — anonymised on purpose (not the brand's real inbox / number).
+  phone: "+20123456789",
+  email: "hello@example.com",
   studio: "Maadi, Cairo, Egypt",
 };
 
@@ -262,8 +266,8 @@ export const footer = {
     { id: "instagram", label: "Instagram", href: "https://instagram.com/" },
     { id: "youtube", label: "YouTube", href: "https://youtube.com/" },
     { id: "facebook", label: "Facebook", href: "https://facebook.com/" },
-    { id: "whatsapp", label: "WhatsApp", href: "https://wa.me/201023446788" },
-    { id: "mail", label: "Email", href: "mailto:Hello@Zaghalil.Com" },
+    { id: "whatsapp", label: "WhatsApp", href: `https://wa.me/${waDigits("+20123456789")}` },
+    { id: "mail", label: "Email", href: "mailto:hello@example.com" },
   ] as const,
 };
 

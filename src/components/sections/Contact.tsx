@@ -2,7 +2,7 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { characters, contact } from "@/content/site";
+import { characters, contact, waDigits } from "@/content/site";
 import { asset } from "@/lib/assets";
 import { useStore } from "@/lib/store";
 import { isEmail, submitForm } from "@/lib/forms";
@@ -101,7 +101,7 @@ export function Contact() {
             <p className="mt-4 max-w-sm text-[16px] leading-8 text-ink/80">{contact.inviteBody}</p>
             <ul className="mt-6 space-y-3 text-[15px] font-semibold text-ink">
               <li>
-                <ContactLink href={`https://wa.me/2${contact.phone}`}>
+                <ContactLink href={`https://wa.me/${waDigits(contact.phone)}`}>
                   <WhatsappIcon /> <span dir="ltr">{contact.phone}</span>
                 </ContactLink>
               </li>

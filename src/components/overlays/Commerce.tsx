@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useMemo, useState } from "react";
-import { characterById, productById, type Product } from "@/content/site";
+import { characterById, contact, productById, waDigits, type Product } from "@/content/site";
 import { asset } from "@/lib/assets";
 import { useStore } from "@/lib/store";
 import { useGo } from "@/lib/nav";
@@ -202,7 +202,7 @@ export function CartDrawer() {
     if (DEMO) return setDemoNote(true);
     const url = process.env.NEXT_PUBLIC_CHECKOUT_URL;
     if (url) return void window.open(url, "_blank", "noopener");
-    const phone = process.env.NEXT_PUBLIC_WHATSAPP || "201023446788";
+    const phone = process.env.NEXT_PUBLIC_WHATSAPP || waDigits(contact.phone);
     window.open(`https://wa.me/${phone}?text=${encodeURIComponent(checkoutMessage(lines, total))}`, "_blank", "noopener");
   };
 

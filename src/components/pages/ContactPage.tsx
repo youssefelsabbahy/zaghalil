@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { careersPage, contact, contactPage } from "@/content/site";
+import { careersPage, contact, contactPage, waDigits } from "@/content/site";
 import { PageTop } from "@/components/ui/Breadcrumb";
 import { Reveal, SplitHeading } from "@/components/ui/primitives";
 import { MailIcon, PinIcon, WhatsappIcon } from "@/components/ui/Icons";
@@ -9,7 +9,7 @@ import { ContactForm, ContactLink } from "@/components/sections/Contact";
 
 const cards = [
   { label: "Email", value: contact.email, href: `mailto:${contact.email}`, Icon: MailIcon, tint: "#F9C6D6" },
-  { label: "WhatsApp", value: `+20 ${contact.phone.slice(1)}`, href: `https://wa.me/2${contact.phone}`, Icon: WhatsappIcon, tint: "#E2CCEB" },
+  { label: "WhatsApp", value: contact.phone, href: `https://wa.me/${waDigits(contact.phone)}`, Icon: WhatsappIcon, tint: "#E2CCEB" },
   { label: "Studio", value: contact.studio, Icon: PinIcon, tint: "#F9C6D6" },
 ];
 

@@ -1,4 +1,5 @@
 import { DEMO } from "./demo";
+import { contact } from "@/content/site";
 
 export type SubmitResult = { ok: true; via: "endpoint" | "mail" | "demo" } | { ok: false; error: string };
 
@@ -28,7 +29,7 @@ export async function submitForm(
       return { ok: false, error: "حصلت مشكلة في الإرسال، جرب تاني كمان شوية." };
     }
   }
-  const to = process.env.NEXT_PUBLIC_CONTACT_EMAIL || "Hello@Zaghalil.Com";
+  const to = process.env.NEXT_PUBLIC_CONTACT_EMAIL || contact.email;
   window.location.href = `mailto:${to}?subject=${encodeURIComponent(mail.subject)}&body=${encodeURIComponent(mail.body)}`;
   return { ok: true, via: "mail" };
 }
