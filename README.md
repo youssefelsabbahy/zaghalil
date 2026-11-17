@@ -59,6 +59,17 @@ contact form and the newsletter never contact anyone, they explain it's a demo i
 the design's email/WhatsApp are shown as plain text. Set `NEXT_PUBLIC_DEMO_MODE=0` only for a
 deployment the brand owner has approved and configured.
 
+## Social previews (Open Graph)
+Every page has a 1200×630 preview in the site's identity: `public/og/home.png`, `characters`,
+`about`, `products`, `contact`, `careers`, plus one per product in `public/og/products/`.
+They're wired through `src/lib/seo.ts` (Open Graph + `summary_large_image` X cards).
+
+Re-render after changing copy or adding the official artwork (uses your installed Chrome):
+
+```bash
+npm run og            # Node 22.6+; set CHROME_PATH if Chrome isn't in the default location
+```
+
 ## Brand assets
 The character art, logo and scene illustrations are the brand's own files and are **not**
 bundled. Drop the official exports into `public/zaghalil/` (naming guide inside) and they

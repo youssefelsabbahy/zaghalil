@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<title>Zaghalil OG</title>
+<style>
+  @font-face { font-family: "Cairo"; src: url("/__fonts/cairo-arabic-wght-normal.woff2") format("woff2"); font-weight: 200 1000; }
+  @font-face { font-family: "Cairo"; src: url("/__fonts/cairo-latin-wght-normal.woff2") format("woff2"); font-weight: 200 1000; unicode-range: U+0000-00FF, U+2013-2014; }
+  @font-face { font-family: "Baloo"; src: url("/__fonts/baloo-bhaijaan-2-arabic-800-normal.woff2") format("woff2"); font-weight: 800; }
+  @font-face { font-family: "Baloo"; src: url("/__fonts/baloo-bhaijaan-2-arabic-700-normal.woff2") format("woff2"); font-weight: 700; }
+  @font-face { font-family: "Baloo"; src: url("/__fonts/baloo-bhaijaan-2-latin-800-normal.woff2") format("woff2"); font-weight: 800; unicode-range: U+0000-00FF; }
+</style>
+<link rel="stylesheet" href="/__brandfonts.css" />
+<style>
+  :root {
+    --orange: #f7953e; --orange-deep: #e7782a; --green: #40a42f; --leaf: #4fcb3b;
+    --mint: #caf4c3; --purple: #a874a4; --sky: #a7d9ec; --cream: #fffff0; --ink: #1f1f1f;
+    --display: "Rabie", "Baloo", "Cairo", sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1200px; height: 630px; background: var(--cream); }
+  body { font-family: "Cairo", sans-serif; -webkit-font-smoothing: antialiased; }
+  .og { position: relative; width: 1200px; height: 630px; overflow: hidden; background: var(--cream); }
+  .sky { position: absolute; inset: 0; background: radial-gradient(60% 75% at 24% 30%, #e6f5fb 0%, rgba(255,255,240,0) 70%); }
+  .dots { position: absolute; inset: 0; opacity: .5;
+    background-image: radial-gradient(rgba(168,116,164,.16) 1.4px, transparent 1.6px); background-size: 26px 26px;
+    mask-image: radial-gradient(70% 80% at 80% 40%, #000 0%, transparent 75%); }
+
+  /* copy column (start = right) */
+  .copy { position: absolute; right: 64px; top: 52px; width: 524px; text-align: right; display: flex; flex-direction: column; align-items: flex-start; }
+  .copy > * { max-width: 100%; }
+  .copy .title, .copy .sub { width: 100%; }
+  .logo { font-family: var(--display); font-weight: 800; font-size: 58px; line-height: 1; color: var(--leaf); text-shadow: 0 3px 0 rgba(0,0,0,.06); }
+  .logo img { height: 64px; width: auto; }
+  .eyebrow { margin-top: 26px; display: inline-flex; align-items: center; gap: 10px; background: var(--mint); color: var(--ink);
+    font-weight: 700; font-size: 22px; padding: 7px 22px; border-radius: 999px; }
+  .title { margin-top: 14px; font-family: var(--display); font-weight: 800; color: var(--ink); font-size: 84px; line-height: 1.14; letter-spacing: 0; }
+  .title .hl { color: var(--leaf); }
+  .sub { margin-top: 14px; font-size: 26px; line-height: 1.6; color: rgba(31,31,31,.72); font-weight: 500;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .og.is-product .copy { top: 40px; }
+  .og.is-product .title { font-size: 72px; }
+  .og.is-product .sub { -webkit-line-clamp: 1; font-size: 24px; }
+  .og.is-product .eyebrow { margin-top: 20px; }
+  .og.is-product .url { margin-top: 20px; }
+  .price { margin-top: 16px; display: flex; align-items: baseline; gap: 14px; }
+  .price .now { font-family: var(--display); font-weight: 800; font-size: 54px; color: var(--purple); }
+  .price .old { font-size: 26px; color: rgba(31,31,31,.4); text-decoration: line-through; }
+  .price .off { background: var(--orange); color: #fff; font-weight: 800; font-size: 20px; padding: 4px 14px; border-radius: 999px; }
+  .price .rate { font-size: 24px; color: rgba(31,31,31,.65); font-weight: 700; display: inline-flex; align-items: center; gap: 6px; }
+  .url { margin-top: 26px; display: inline-flex; align-items: center; gap: 10px; background: var(--orange); color: #fff; font-weight: 800;
+    font-size: 22px; padding: 10px 26px; border-radius: 999px; box-shadow: 0 6px 0 0 var(--orange-deep); direction: ltr; }
+
+  /* art column (end = left) */
+  /* SVG text is laid out LTR so text-anchor="end" means "right edge at x" (Arabic still shapes/bidis correctly). */
+  .art { position: absolute; left: 36px; top: 0; width: 560px; height: 574px; direction: ltr; }
+
+  /* ticker */
+  .ticker { position: absolute; left: 0; right: 0; bottom: 0; height: 56px; background: var(--purple); display: flex; align-items: center; gap: 26px;
+    padding: 0 28px; white-space: nowrap; overflow: hidden; color: #fff; font-weight: 700; font-size: 21px; }
+  .ticker svg { flex: none; }
+
+  /* product tile (HTML so long names wrap) */
+  .ptile { position: absolute; left: 44px; top: 70px; width: 472px; height: 472px; border-radius: 40px; overflow: hidden;
+    display: flex; align-items: center; gap: 18px; padding: 0 36px; border: 3px solid rgba(0,0,0,.06); }
+  .ptile .pic { width: 46%; flex: none; aspect-ratio: 1; }
+  .ptile .pic svg, .ptile .pic img { width: 100%; height: 100%; display: block; object-fit: contain; }
+  .ptile .txt { flex: 1; min-width: 0; direction: rtl; text-align: right; }
+  .ptile .nm { font-family: var(--display); font-weight: 800; color: var(--ink); line-height: 1.05; }
+  .ptile .tr { margin-top: 10px; font-weight: 700; font-size: 20px; line-height: 1.5; color: rgba(31,31,31,.7); }
+  .ptile .zoom { position: absolute; left: 22px; top: 22px; width: 46px; height: 46px; border-radius: 12px; background: rgba(255,255,255,.8); display: grid; place-items: center; }
+
+  /* shared bits */
+  .card-ink { stroke: var(--ink); stroke-width: 5; stroke-linejoin: round; }
+  .panel { position: absolute; border-radius: 34px; overflow: hidden; }
+</style>
+</head>
+<body>
+<div class="og" id="og"></div>
+<script>
+const INK = "#1f1f1f";
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+const ar = (n) => String(n).replace(/\d/g, (d) => "٠١٢٣٤٥٦٧٨٩"[d]);
+
+function flower(color, size = 26) {
+  let petals = "";
+  for (let i = 0; i < 10; i++) {
+    const a = (i / 10) * Math.PI * 2;
+    petals += `<circle cx="${20 + Math.cos(a) * 11}" cy="${20 + Math.sin(a) * 11}" r="6.2" fill="${color}"/>`;
+  }
+  return `<svg width="${size}" height="${size}" viewBox="0 0 40 40">${petals}<circle cx="20" cy="20" r="11" fill="${color}"/><circle cx="20" cy="20" r="5" fill="#fff" fill-opacity=".45"/></svg>`;
+}
+const spark = (x, y, s = 1, rot = 0, color = "#FFCC1A") =>
+  `<g transform="translate(${x} ${y}) rotate(${rot}) scale(${s})"><path d="M0 -24v12M-17 -14l7 8M17 -14l-7 8" stroke="${color}" stroke-width="7" stroke-linecap="round"/></g>`;
+const star4 = (x, y, r = 12) =>
+  `<path transform="translate(${x} ${y})" d="M0 ${-r} L${r * 0.3} ${-r * 0.3} L${r} 0 L${r * 0.3} ${r * 0.3} L0 ${r} L${-r * 0.3} ${r * 0.3} L${-r} 0 L${-r * 0.3} ${-r * 0.3}Z" fill="#FFCC1A" stroke="${INK}" stroke-width="3" stroke-linejoin="round"/>`;
+const cloud = (x, y, s = 1) =>
+  `<g transform="translate(${x} ${y}) scale(${s})"><path d="M28 62C14 62 6 54 6 44s8-17 18-17c2-12 12-21 25-21 11 0 20 6 24 15 3-2 7-3 11-3 12 0 22 9 22 21 0 13-10 23-23 23Z" fill="#E4F4FB" stroke="#BFE2F0" stroke-width="3"/><path d="M30 40c2-8 9-13 17-13" stroke="#fff" stroke-width="5" stroke-linecap="round" fill="none"/></g>`;
+
+/** A character: official art when exported, else the site's plush / badge stand-in. */
+function plush(c, cx, cy, rx = 34, ry = 42) {
+  if (c.img) return `<image href="${c.img}" x="${cx - rx * 1.7}" y="${cy - ry * 2.4}" width="${rx * 3.4}" height="${ry * 3.2}" preserveAspectRatio="xMidYMax meet"/>`;
+  return `<g>
+    <ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="${c.plush}" stroke="${INK}" stroke-width="4.5"/>
+    <path d="M${cx - rx * 0.55} ${cy - ry * 0.55} q${rx * 0.25} ${-ry * 0.3} ${rx * 0.6} ${-ry * 0.32}" stroke="#fff" stroke-opacity=".7" stroke-width="6" stroke-linecap="round" fill="none"/>
+    <circle cx="${cx - rx * 0.3}" cy="${cy - ry * 0.05}" r="4" fill="${INK}"/><circle cx="${cx + rx * 0.3}" cy="${cy - ry * 0.05}" r="4" fill="${INK}"/>
+    <ellipse cx="${cx - rx * 0.55}" cy="${cy + ry * 0.22}" rx="7" ry="5" fill="#F7A9C2"/><ellipse cx="${cx + rx * 0.55}" cy="${cy + ry * 0.22}" rx="7" ry="5" fill="#F7A9C2"/>
+  </g>`;
+}
+function badge(c, x, y, size) {
+  if (c.img) return `<image href="${c.img}" x="${x}" y="${y}" width="${size}" height="${size}" preserveAspectRatio="xMidYMid meet"/>`;
+  const s = size / 200;
+  return `<g transform="translate(${x} ${y}) scale(${s})">
+    <path d="M100 14c30 0 58 10 72 36s12 60-2 86-42 50-72 50-56-18-70-44S12 80 30 52 70 14 100 14Z" fill="${c.plush}" stroke="${INK}" stroke-width="6" stroke-linejoin="round"/>
+    <path d="M58 52c10-12 26-18 40-18" stroke="#fff" stroke-opacity=".7" stroke-width="10" stroke-linecap="round" fill="none"/>
+    ${star4(168, 40, 14)}${star4(32, 158, 9)}
+    <text x="100" y="128" text-anchor="middle" font-family="Rabie, Baloo" font-weight="800" font-size="84" fill="${INK}">${esc(c.initial)}</text>
+  </g>`;
+}
+
+/* ───────── art per variant ───────── */
+const art = {
+  home(d) {
+    const seats = d.swing;
+    const half = 190, cx = 262, plankY = 400;
+    const rope = (x) => `<rect x="${x - 7}" y="-20" width="14" height="${plankY + 26}" fill="url(#rope)" stroke="${INK}" stroke-width="3.5"/>`;
+    const seatX = (i) => cx + (i - (seats.length - 1) / 2) * 62;
+    return `<svg width="560" height="574" viewBox="0 0 560 574">
+      <defs>
+        <pattern id="rope" width="14" height="18" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+          <rect width="14" height="18" fill="#E9A25B"/><rect width="14" height="7" fill="#B8662E"/></pattern>
+        <linearGradient id="wood" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#D88A4A"/><stop offset="1" stop-color="#B9693A"/></linearGradient>
+        <radialGradient id="shadow"><stop offset="0" stop-color="rgba(60,50,40,.32)"/><stop offset="1" stop-color="rgba(60,50,40,0)"/></radialGradient>
+      </defs>
+      ${cloud(30, 120, 1.05)}${cloud(370, 70, 0.8)}${cloud(430, 250, 0.7)}${cloud(60, 330, 0.6)}
+      <ellipse cx="${cx}" cy="520" rx="230" ry="26" fill="url(#shadow)"/>
+      <g transform="rotate(-4 ${cx} 0)">
+        ${rope(cx - half)}${rope(cx + half)}
+        ${seats.map((c, i) => plush(c, seatX(i), plankY - 40, 28, 36)).join("")}
+        <rect x="${cx - half - 32}" y="${plankY}" width="${half * 2 + 64}" height="32" rx="14" fill="url(#wood)" stroke="${INK}" stroke-width="4.5"/>
+        <path d="M${cx - half + 6} ${plankY + 11}h${half * 2 - 12}" stroke="rgba(90,40,10,.35)" stroke-width="3"/>
+        ${[cx - half, cx + half].map((x) => `<ellipse cx="${x}" cy="${plankY + 16}" rx="17" ry="21" fill="url(#rope)" stroke="${INK}" stroke-width="3.5"/>`).join("")}
+        ${d.perch ? plush(d.perch, cx + half + 8, 250, 24, 30) : ""}
+      </g>
+      ${spark(96, 70, 1, -20)}${spark(500, 160, 0.8, 25, "#F7953E")}
+      ${star4(470, 410, 12)}${star4(54, 260, 9)}
+    </svg>`;
+  },
+
+  characters(d) {
+    const cast = d.cast;
+    const size = 128;
+    const pos = cast.map((c, i) => {
+      const row = i < 4 ? 0 : 1;
+      const inRow = row ? i - 4 : i;
+      const count = row ? cast.length - 4 : 4;
+      const x = 280 - ((count - 1) * (size + 4)) / 2 + inRow * (size + 4) - size / 2;
+      const y = row ? 300 : 150;
+      return { c, x, y: y + (inRow % 2 ? 14 : 0) };
+    });
+    return `<svg width="560" height="574" viewBox="0 0 560 574">
+      <rect x="24" y="96" width="512" height="420" rx="36" fill="#F7DFA6" stroke="rgba(0,0,0,.08)" stroke-width="3"/>
+      ${Array.from({ length: 8 }, (_, i) => `<rect x="${44 + i * 62}" y="96" width="30" height="300" fill="#F3D493" opacity=".55"/>`).join("")}
+      <rect x="350" y="120" width="150" height="100" rx="10" fill="#CFEAF6" stroke="#E2A35A" stroke-width="10"/>
+      <path d="M425 120v100M350 170h150" stroke="#E2A35A" stroke-width="7"/>
+      <rect x="24" y="396" width="512" height="120" fill="#E8B477"/><rect x="24" y="388" width="512" height="10" fill="#E2A35A"/>
+      <rect x="24" y="96" width="512" height="420" rx="36" fill="none" stroke="rgba(0,0,0,.08)" stroke-width="3"/>
+      ${pos.map((p) => badge(p.c, p.x, p.y, size)).join("")}
+      ${spark(70, 80, 1, -20)}${spark(500, 70, .8, 20, "#F7953E")}
+    </svg>`;
+  },
+
+  about(d) {
+    const rows = d.milestones.map((m, i) => {
+      const y = 170 + i * 92;
+      return `<g>
+        <text x="500" y="${y + 13}" text-anchor="end" font-family="Rabie, Baloo" font-weight="800" font-size="40" fill="#fff">${ar(m.year)}</text>
+        <g transform="translate(${381} ${y - 13})">${flower(m.color, 30).replace("<svg", "<svg x='0' y='0'")}</g>
+        <text x="364" y="${y + 6}" text-anchor="end" font-family="Rabie, Baloo" font-weight="800" font-size="24" fill="#fff">${esc(m.title)}</text>
+        <rect x="${364 - 200}" y="${y + 22}" width="200" height="8" rx="4" fill="rgba(255,255,255,.28)"/>
+      </g>`;
+    }).join("");
+    return `<svg width="560" height="574" viewBox="0 0 560 574">
+      <rect x="24" y="96" width="512" height="420" rx="40" fill="#A874A4"/>
+      <path d="M396 150V470" stroke="rgba(255,255,255,.6)" stroke-width="3" stroke-dasharray="7 7"/>
+      ${rows}
+      <g transform="translate(40 392)">${badge(d.cast.find((c) => c.id === "zouina") || d.cast[0], 0, 0, 112)}</g>
+      ${spark(80, 80, 1, -20)}${star4(512, 104, 14)}
+    </svg>`;
+  },
+
+  products(d) {
+    const fan = d.fan;
+    const card = (c, x, y, rot, bg) => `<g transform="translate(${x} ${y}) rotate(${rot})">
+      <rect x="-82" y="-104" width="164" height="208" rx="22" fill="${bg}" stroke="#fff" stroke-width="7"/>
+      <rect x="-82" y="-104" width="164" height="208" rx="22" fill="none" stroke="rgba(0,0,0,.08)" stroke-width="2"/>
+      ${badge(c, -62, -80, 124)}
+      <text x="0" y="78" text-anchor="middle" font-family="Rabie, Baloo" font-weight="800" font-size="24" fill="${INK}">${esc(c.name)}</text>
+    </g>`;
+    return `<svg width="560" height="574" viewBox="0 0 560 574">
+      <rect x="40" y="100" width="480" height="412" rx="38" fill="#D6ECF2"/>
+      <path d="M40 470h480v4a38 38 0 0 1-38 38H78a38 38 0 0 1-38-38Z" fill="#A7D9EC"/>
+      ${card(fan[0], 180, 300, -14, "#F2A3A0")}${card(fan[1], 380, 300, 14, "#CDA6E8")}${card(fan[2], 280, 280, 0, "#A7D9EC")}
+      ${spark(84, 92, 1, -20)}${spark(492, 96, .8, 22, "#F7953E")}${star4(488, 470, 13)}
+    </svg>`;
+  },
+
+  product(d) {
+    const c = d.product.character;
+    const nameSize = c.name.length > 9 ? 44 : c.name.length > 6 ? 54 : 66;
+    const pic = c.img
+      ? `<img src="${c.img}" alt="">`
+      : `<svg viewBox="0 0 200 200">${badge({ ...c, img: null }, 0, 0, 200)}</svg>`;
+    return `<div class="ptile" style="background:${c.tile}">
+        <div class="zoom"><svg width="26" height="26" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="${INK}" stroke-width="2.2"/><path d="m20 20-4.4-4.4M10.5 8v5M8 10.5h5" stroke="${INK}" stroke-width="2.2" stroke-linecap="round"/></svg></div>
+        <div class="pic">${pic}</div>
+        <div class="txt"><div class="nm" style="font-size:${nameSize}px">${esc(c.name)}</div>${c.traits ? `<div class="tr">${esc(c.traits)}</div>` : ""}</div>
+      </div>
+      <svg width="560" height="574" viewBox="0 0 560 574" style="position:absolute;inset:0;pointer-events:none">${spark(470, 64, .9, 22, "#F7953E")}${star4(500, 520, 13)}</svg>`;
+  },
+
+  contact(d) {
+    const field = (label, y, h = 44) => `
+      <text x="456" y="${y}" text-anchor="end" font-family="Cairo" font-weight="700" font-size="19" fill="rgba(31,31,31,.75)">${esc(label)}</text>
+      <rect x="104" y="${y + 12}" width="352" height="${h}" rx="${h > 50 ? 22 : 22}" fill="#E8F8E4"/>`;
+    return `<svg width="560" height="574" viewBox="0 0 560 574">
+      <g transform="rotate(-3 280 300)">
+        <rect x="72" y="92" width="416" height="430" rx="36" fill="#B4E8A9"/>
+        <text x="456" y="152" text-anchor="end" font-family="Rabie, Baloo" font-weight="800" font-size="36" fill="${INK}">${esc(d.formTitle)}</text>
+        ${field("الاسم كامل", 196)}${field("ايميلك", 278)}${field("اكتب طلبك", 360, 70)}
+        <rect x="104" y="458" width="150" height="46" rx="23" fill="#36A826"/>
+        <rect x="104" y="452" width="150" height="46" rx="23" fill="#4FCB3B"/>
+        <text x="179" y="482" text-anchor="middle" font-family="Cairo" font-weight="800" font-size="20" fill="${INK}">${esc(d.button)}</text>
+      </g>
+      <g transform="translate(96 96) rotate(-12)"><rect x="-38" y="-38" width="76" height="76" rx="22" fill="#FBE08A" stroke="${INK}" stroke-width="4"/>
+        <rect x="-20" y="-13" width="40" height="28" rx="5" fill="none" stroke="${INK}" stroke-width="4"/><path d="M-18 -10l18 13 18-13" fill="none" stroke="${INK}" stroke-width="4" stroke-linejoin="round"/></g>
+      ${spark(500, 96, 1, 20, "#F7953E")}${star4(500, 470, 13)}
+    </svg>`;
+  },
+};
+
+/** Counts rendered lines of a block by clustering its text rects by vertical position. */
+function lineCount(el) {
+  const r = document.createRange();
+  r.selectNodeContents(el);
+  const mids = [...r.getClientRects()].filter((x) => x.width > 1).map((x) => x.top + x.height / 2).sort((a, b) => a - b);
+  const size = parseFloat(getComputedStyle(el).fontSize);
+  let lines = 0, last = -1e9;
+  for (const m of mids) if (m - last > size * 0.5) { lines++; last = m; }
+  return lines;
+}
+/** Shrinks the title until it fits in `maxLines` and inside the column. */
+function fitTitle(el, maxLines = 2, min = 50) {
+  let size = parseFloat(getComputedStyle(el).fontSize);
+  while ((lineCount(el) > maxLines || el.scrollWidth > el.clientWidth + 1) && size > min) {
+    size -= 2;
+    el.style.fontSize = size + "px";
+  }
+}
+
+/** Keeps the whole copy column above the ticker: subtitle → 1 line, then smaller title. */
+function fitCopy(maxBottom = 574 - 22) {
+  const copy = document.querySelector(".copy");
+  const title = document.getElementById("t");
+  const sub = document.querySelector(".sub");
+  const bottom = () => copy.getBoundingClientRect().bottom;
+  let size = parseFloat(getComputedStyle(title).fontSize);
+  const soft = Math.max(62, Math.round(size * 0.84));
+  // 1) gently shrink the title, 2) then trim the subtitle to one line, 3) then shrink further.
+  while (bottom() > maxBottom && size > soft) title.style.fontSize = (size -= 2) + "px";
+  if (bottom() > maxBottom && sub) sub.style.webkitLineClamp = "1";
+  while (bottom() > maxBottom && size > 44) title.style.fontSize = (size -= 2) + "px";
+}
+
+window.renderOG = async (d) => {
+  const og = document.getElementById("og");
+  og.className = "og" + (d.product ? " is-product" : "");
+  const title = (d.highlight
+    ? esc(d.title).replace(esc(d.highlight), `<span class="hl">${esc(d.highlight)}</span>`)
+    : esc(d.title)).replace(/\n/g, "<br>");
+  const price = d.product
+    ? `<div class="price">
+        <span class="now">${ar(d.product.price)} جنيه</span>
+        ${d.product.oldPrice ? `<span class="old">${ar(d.product.oldPrice)} جنيه</span><span class="off">وفّر ${ar(d.product.discount)}٪</span>` : ""}
+        ${d.product.rating ? `<span class="rate">${ar(d.product.rating)} <svg width="22" height="22" viewBox="0 0 24 24"><path fill="#F7953E" d="m12 2.8 2.8 5.8 6.3.9-4.6 4.4 1.1 6.3L12 17.2l-5.6 3 1.1-6.3L2.9 9.5l6.3-.9L12 2.8Z"/></svg></span>` : ""}
+      </div>`
+    : "";
+  og.innerHTML = `
+    <div class="sky"></div><div class="dots"></div>
+    <div class="art">${art[d.art](d)}</div>
+    <div class="copy">
+      <div class="logo">${d.logo ? `<img src="${d.logo}" alt="">` : "زغاليل"}</div>
+      ${d.eyebrow ? `<div class="eyebrow">${esc(d.eyebrow)}</div>` : ""}
+      <h1 class="title" id="t">${title}</h1>
+      ${d.subtitle ? `<p class="sub">${esc(d.subtitle)}</p>` : ""}
+      ${price}
+      <div class="url">${esc(d.url)}</div>
+    </div>
+    <div class="ticker">${d.ticker.map((t, i) => `<span>${esc(t)}</span>${flower(["#CAF4C3", "#FFCC1A", "#F9B8C9"][i % 3], 24)}`).join("")}</div>`;
+  await document.fonts.ready;
+  await Promise.all([...og.querySelectorAll("img, image")].map((im) => (im.decode ? im.decode().catch(() => {}) : null)));
+  fitTitle(document.getElementById("t"), d.titleLines || 2);
+  fitCopy();
+  await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+  return true;
+};
+</script>
+</body>
+</html>

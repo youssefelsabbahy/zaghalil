@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { SmoothScroll } from "@/components/providers/SmoothScroll";
 import { SiteShell } from "@/components/shell/SiteShell";
+import { DEFAULT_DESCRIPTION, DEFAULT_TITLE, pageMeta } from "@/lib/seo";
 
 const cairo = localFont({
   src: [
@@ -39,15 +40,9 @@ export const metadata: Metadata = {
     { name: "Youssef Elsabbahy (development)", url: "https://youssefelsabbahy.com" },
   ],
   creator: "Youssef Elsabbahy",
-  title: { default: "زغاليل | أول عالم كرتوني مصري متكامل", template: "%s | زغاليل" },
-  description:
-    "شخصيات كرتونية مصرية تصنع محتوى ترفيهي آمن وممتع لكل أفراد العائلة. من سن 7 لـ 77 سنة. حلقات، أغاني، دكان، وعروض مسرحية.",
-  openGraph: {
-    title: "زغاليل — اهلاً بيك في عالم زغاليل",
-    description: "شخصيات كرتونية مصرية تصنع محتوى ترفيهي آمن وممتع لكل أفراد العائلة.",
-    locale: "ar_EG",
-    type: "website",
-  },
+  title: { default: DEFAULT_TITLE, template: "%s | زغاليل" },
+  applicationName: "زغاليل",
+  ...pageMeta({ description: DEFAULT_DESCRIPTION, path: "/", image: "/og/home.png" }),
 };
 
 export const viewport: Viewport = {
