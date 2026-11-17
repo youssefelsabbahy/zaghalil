@@ -1,0 +1,120 @@
+@import "tailwindcss";
+@import "../generated/brand-fonts.css";
+
+@theme {
+  /* Official Zaghalil palette (brand identity board) */
+  --color-orange: #f7953e;
+  --color-orange-deep: #e7782a;
+  --color-green: #40a42f;
+  --color-leaf: #4fcb3b;
+  --color-leaf-deep: #36a826;
+  --color-mint: #caf4c3;
+  --color-mint-deep: #a9e59f;
+  --color-purple: #a874a4;
+  --color-purple-deep: #8e5a8a;
+  --color-sky: #a7d9ec;
+  --color-sky-deep: #82c3dc;
+  --color-cream: #fffff0;
+  --color-paper: #fdfbe4;
+  --color-sand: #f8efc9;
+  --color-charcoal: #2d2d2d;
+  --color-ink: #1f1f1f;
+  --color-blush: #f9b8c9;
+  --color-sun: #ffcc1a;
+
+  --font-display: "Rabie", var(--font-baloo), "Cairo", system-ui, sans-serif;
+  --font-body: var(--font-cairo), system-ui, sans-serif;
+
+  --radius-blob: 2rem;
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --animate-marquee: marquee var(--marquee-duration, 40s) linear infinite;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-wiggle: wiggle 2.4s ease-in-out infinite;
+
+  @keyframes marquee {
+    from { transform: translate3d(0, 0, 0); }
+    to { transform: translate3d(50%, 0, 0); }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  @keyframes wiggle {
+    0%, 100% { transform: rotate(-4deg); }
+    50% { transform: rotate(4deg); }
+  }
+}
+
+@layer base {
+  html {
+    background: var(--color-cream);
+    color: var(--color-charcoal);
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    scroll-padding-top: 6rem;
+  }
+  html.lenis, html.lenis body { height: auto; }
+  .lenis.lenis-smooth { scroll-behavior: auto !important; }
+  .lenis.lenis-stopped { overflow: hidden; }
+
+  body {
+    font-family: var(--font-body);
+    overflow-x: clip;
+  }
+  ::selection { background: var(--color-mint); color: var(--color-ink); }
+  :focus-visible {
+    outline: 3px solid var(--color-orange);
+    outline-offset: 3px;
+    border-radius: 999px;
+  }
+  button, [role="button"] { cursor: pointer; }
+  img, svg, video, canvas { display: block; }
+}
+
+@layer components {
+  .font-display {
+    font-family: var(--font-display);
+    font-weight: 800;
+    letter-spacing: 0;
+    line-height: 1.15;
+  }
+  /* Chunky "toy block" edge used on every card of the identity */
+  .edge-card {
+    border: 2px solid var(--edge, rgba(0, 0, 0, 0.08));
+    box-shadow: -6px 7px 0 0 var(--edge, rgba(0, 0, 0, 0.08));
+  }
+  .ink-outline {
+    paint-order: stroke fill;
+    -webkit-text-stroke: 0.2em var(--color-ink);
+    text-shadow: 0 4px 0 var(--color-ink);
+  }
+  .grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.035;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    border-radius: inherit;
+  }
+  .no-scrollbar { scrollbar-width: none; }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+}
+
+/* keyframes referenced from inline SVG styles (always emitted) */
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes pulse { 50% { opacity: 0.45; } }
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+@keyframes sway { from { transform: rotate(-12deg); } to { transform: rotate(12deg); } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
