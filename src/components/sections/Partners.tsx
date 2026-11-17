@@ -29,7 +29,7 @@ function Logo({ id, name, latin }: { id: string; name: string; latin?: boolean }
     <li className="grid h-24 w-48 shrink-0 place-items-center px-6 grayscale-[35%] transition duration-300 hover:scale-110 hover:grayscale-0">
       {src ? (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={src} alt={name} className="max-h-16 w-auto object-contain" loading="lazy" />
+        <img src={src} alt={name} className="max-h-16 w-auto object-contain mix-blend-multiply" loading="lazy" />
       ) : (
         <span className={cn("whitespace-nowrap text-ink/70", latin ? "text-2xl font-black tracking-[0.18em] uppercase" : "font-display text-3xl")}>
           {name}
@@ -43,9 +43,7 @@ export function LogoMarquee({ className }: { className?: string }) {
   const row = partners.logos.map((l) => <Logo key={l.id} {...l} />);
   return (
       <div className={cn("relative overflow-hidden", className, "[mask-image:linear-gradient(90deg,transparent,#000_14%,#000_86%,transparent)]")}>
-        <ul className="flex w-max animate-marquee items-center hover:[animation-play-state:paused]" style={{ ["--marquee-duration" as string]: "30s" }}>
-          {row}
-          {row}
+        <ul className="flex w-max animate-marquee items-center hover:[animation-play-state:paused]" style={{ ["--marquee-duration" as string]: "40s" }}>
           {row}
           {row}
         </ul>

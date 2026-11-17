@@ -12,8 +12,8 @@ export default function Home() {
   return (
     <main>
       <Hero />
-      <Story />
       <Characters />
+      <Story />
       <Partners />
       <Services />
       <Shop />

@@ -38,7 +38,7 @@ export function ProductArt({
     return (
       <div className={cn("relative overflow-hidden", className)} style={{ background: c.tile }}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={src} alt={p.name} className="absolute inset-0 h-full w-full object-contain" loading="lazy" draggable={false} />
+        <img src={src} alt={p.name} className="absolute inset-[9%] h-[82%] w-[82%] object-contain drop-shadow-[0_10px_14px_rgba(0,0,0,0.12)]" loading="lazy" draggable={false} />
       </div>
     );
   }

@@ -141,7 +141,7 @@ export function Videos() {
         <Pill>{videos.eyebrow}</Pill>
         <SplitHeading text={videos.title} className="mt-5 text-[clamp(2.1rem,4.2vw,3.4rem)] text-ink" />
       </div>
-      <ul className="no-scrollbar mx-auto mt-10 flex max-w-[1240px] snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-6 sm:px-6 lg:grid lg:grid-cols-4 lg:gap-6 lg:overflow-visible lg:px-8">
+      <ul className="no-scrollbar mx-auto mt-10 flex max-w-[1240px] snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-6 sm:px-6 lg:grid lg:grid-cols-5 lg:gap-5 lg:overflow-visible lg:px-8">
         {videos.items.map((v, i) => (
           <VideoCard key={v.id} v={v} i={i} onOpen={() => setOpen(v)} />
         ))}

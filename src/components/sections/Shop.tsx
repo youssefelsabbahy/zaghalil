@@ -18,7 +18,7 @@ export function StickerFan({ category }: { category: ShopCategoryId }) {
   if (src) {
     return (
       // eslint-disable-next-line @next/next/no-img-element
-      <img src={src} alt="" className="absolute inset-[10%] h-[80%] w-[80%] object-contain transition-transform duration-500 group-hover:scale-110" loading="lazy" />
+      <img src={src} alt="" className="absolute inset-[5%] h-[90%] w-[90%] object-contain transition-transform duration-500 group-hover:scale-110" loading="lazy" />
     );
   }
   return (

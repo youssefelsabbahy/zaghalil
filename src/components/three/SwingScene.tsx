@@ -230,8 +230,49 @@ function SeatArt({ spec, x }: { spec: SeatSpec; x: number }) {
   return (
     <mesh position={[x, h / 2 - 0.05, 0.02]}>
       <planeGeometry args={[h * aspect, h]} />
-      <meshBasicMaterial map={tex} transparent alphaTest={0.02} toneMapped={false} />
+      <meshBasicMaterial map={tex} transparent alphaTest={0.35} toneMapped={false} />
     </mesh>
+  );
+}
+
+/** Relative standing heights, so the goose towers and Qalqas stays little — like the illustration. */
+const CAST_HEIGHT: Record<string, number> = { wezza: 2.55, naanaa: 2.1, qalqas: 1.65, zaghloul: 2.2, zouina: 2.15, basal: 2.25 };
+const ROW_WIDTH = 6.9;
+
+/** The whole cast as cut-outs, shoulder to shoulder, packed to fit the plank. */
+function CastRow({ seats }: { seats: SeatSpec[] }) {
+  const texs = useTexture(seats.map((s) => s.texture!)) as THREE.Texture[];
+  const layout = useMemo(() => {
+    const items = seats.map((s, i) => {
+      const t = texs[i];
+      t.colorSpace = THREE.SRGBColorSpace;
+      t.anisotropy = 4;
+      const img = t.image as HTMLImageElement;
+      const h = CAST_HEIGHT[s.id] ?? 2.1;
+      return { id: s.id, tex: t, h, w: h * (img.width / img.height) };
+    });
+    const overlap = (a: { w: number }, b: { w: number }) => Math.min(a.w, b.w) * 0.3;
+    let total = items[0]?.w ?? 0;
+    for (let i = 1; i < items.length; i++) total += items[i].w - overlap(items[i - 1], items[i]);
+    const k = Math.min(1, ROW_WIDTH / total);
+    let cursor = (-total * k) / 2;
+    return items.map((it, i) => {
+      if (i > 0) cursor -= overlap(items[i - 1], it) * k;
+      const x = cursor + (it.w * k) / 2;
+      cursor += it.w * k;
+      return { ...it, x, w: it.w * k, h: it.h * k };
+    });
+  }, [seats, texs]);
+  return (
+    <>
+      {layout.map((it, i) => (
+        // alternate depth so overlapping neighbours never z-fight
+        <mesh key={it.id} position={[it.x, it.h / 2 + 0.2, 0.05 + (i % 2) * 0.14]} renderOrder={i % 2}>
+          <planeGeometry args={[it.w, it.h]} />
+          <meshBasicMaterial map={it.tex} transparent alphaTest={0.35} toneMapped={false} />
+        </mesh>
+      ))}
+    </>
   );
 }
 
@@ -333,13 +374,19 @@ function Swing({ seats, perch, scrollVel }: { seats: SeatSpec[]; perch?: SeatSpe
             <RoundedBox args={[7.36, 0.56, 1.51]} radius={0.23} smoothness={4} material={inkMat} />
           </group>
           {/* cast */}
-          {seats.map((s, i) =>
-            s.texture ? (
-              <Suspense key={s.id} fallback={null}>
-                <SeatArt spec={s} x={seatX(i)} />
-              </Suspense>
-            ) : (
-              <Plush key={s.id} spec={s} x={seatX(i)} grad={grad} index={i} />
+          {seats.every((s) => s.texture) ? (
+            <Suspense fallback={null}>
+              <CastRow seats={seats} />
+            </Suspense>
+          ) : (
+            seats.map((s, i) =>
+              s.texture ? (
+                <Suspense key={s.id} fallback={null}>
+                  <SeatArt spec={s} x={seatX(i)} />
+                </Suspense>
+              ) : (
+                <Plush key={s.id} spec={s} x={seatX(i)} grad={grad} index={i} />
+              )
             )
           )}
           {perch &&

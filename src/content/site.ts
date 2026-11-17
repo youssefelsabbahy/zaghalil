@@ -106,14 +106,18 @@ export const partners = {
   title: "اللي شاركونا الرحلة",
   stats: [
     { value: 50, prefix: "+", suffix: "", label: "شراكة ناجحة" },
-    { value: 3, prefix: "+", suffix: "M", label: "مشاهدة شهرياً" },
+    { value: 2, prefix: "+", suffix: "M", label: "مشاهدة شهرياً" },
     { value: 120, prefix: "+", suffix: "", label: "فعالية وحدث" },
     { value: 98, prefix: "", suffix: "٪", label: "رضا العملاء" },
   ],
   logos: [
+    { id: "uula", name: "UULA", latin: true },
     { id: "eva-pharma", name: "EVA PHARMA", latin: true },
+    { id: "mrsool", name: "مرسول" },
+    { id: "khotwh", name: "خطوة" },
     { id: "al-adwaa", name: "الأضواء" },
     { id: "bahia", name: "بهية" },
+    { id: "spacetoon", name: "سبيستون" },
     { id: "oppo", name: "oppo", latin: true },
   ],
 };
@@ -210,6 +214,7 @@ export const videos = {
     { id: "domoo3", title: "دايمًا دموع!", scene: "night" as const, character: "qalqas" as CharacterId },
     { id: "saqsaqa", title: "دراما السقسقة", scene: "living" as const, character: "qalqas" as CharacterId },
     { id: "tarawa", title: "البحث عن طراوة!", scene: "fan" as const, character: "zaghloul" as CharacterId },
+    { id: "rogola", title: "هي دي الرجولة؟", scene: "living" as const, character: "qalqas" as CharacterId },
   ],
 };
 

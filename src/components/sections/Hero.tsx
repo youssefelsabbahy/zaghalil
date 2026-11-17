@@ -4,9 +4,9 @@ import dynamic from "next/dynamic";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { characterById, hero, swingCast, ticker } from "@/content/site";
-import { asset } from "@/lib/assets";
+import { asset, firstAsset } from "@/lib/assets";
 import { useGo } from "@/lib/nav";
-import { Button, Cloud, Flower, Spark } from "@/components/ui/primitives";
+import { Button, Cloud, Flower, Spark, Wordmark } from "@/components/ui/primitives";
 import type { SeatSpec } from "@/components/three/SwingScene";
 
 const SwingScene = dynamic(() => import("@/components/three/SwingScene"), { ssr: false });
@@ -78,7 +78,7 @@ export function Hero() {
                 transition={{ type: "spring", stiffness: 260, damping: 12, delay: 0.7 }}
                 whileHover={{ rotate: [0, -4, 4, -2, 0], transition: { duration: 0.6 } }}
               >
-                {hero.titleBrand}
+                <Wordmark logoEm={0.92} className="translate-y-[0.06em]" />
                 <Spark className="absolute -top-6 -left-8 h-10 w-10 -rotate-12 animate-wiggle" />
               </motion.span>
             </motion.span>
@@ -138,7 +138,7 @@ export function Hero() {
 }
 
 export function Ticker() {
-  const icon = asset("characters/zaghloul");
+  const icon = firstAsset("brand/mascot", "characters/zaghloul");
   const row = (
     <ul className="flex shrink-0 items-center">
       {ticker.map((t) => (

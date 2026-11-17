@@ -8,6 +8,7 @@ each file replaces its stand-in. Missing files simply keep the stand-in.
 | Path (no extension needed: .webp/.png/.svg/.avif/.jpg) | Used in |
 |---|---|
 | `brand/logo` | Header, video cards, footer wordmark |
+| `brand/mascot` | Little Zaghloul between the hero ticker items (falls back to `characters/zaghloul`) |
 | `characters/zaghloul` `qalqas` `naanaa` `zouina` `basal` `wezza` `otteya` | 3D swing (as billboards), cast cards, contact lineup, sticker fans, products |
 | `poses/zouina-sitting` | Timeline card corner (falls back to `characters/zouina`) |
 | `poses/<character>-wave` | Large cards on `/characters` (falls back to `characters/<character>`) |
@@ -19,8 +20,8 @@ each file replaces its stand-in. Missing files simply keep the stand-in.
 | `shop/stickers` `notebooks` `gifts` `merch` | Shop category tiles (square) |
 | `products/<product-id>` | Product image everywhere (ids in `src/content/site.ts`) |
 | `products/<product-id>-2` … `-4` | Extra gallery images on the product page |
-| `videos/haqqi` `domoo3` `saqsaqa` `tarawa` (.mp4/.webm) | Hover preview + modal player |
+| `videos/haqqi` `domoo3` `saqsaqa` `tarawa` `rogola` (.mp4/.webm) | Hover preview + modal player |
 | `videos/<id>-poster` | Video card poster (9:16) |
-| `partners/eva-pharma` `al-adwaa` `bahia` `oppo` | Partner logo marquee |
+| `partners/uula` `eva-pharma` `mrsool` `khotwh` `al-adwaa` `bahia` `spacetoon` `oppo` | Partner logo marquee |
 | `avatars/t1` `t2` `t3` | Testimonial avatars |
 | `fonts/Rabie-Bold.woff2` (any Rabie-*.woff2/otf/ttf) | Licensed heading font; replaces the bundled fallback |

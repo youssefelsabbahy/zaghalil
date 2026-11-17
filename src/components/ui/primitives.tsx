@@ -148,11 +148,16 @@ export function SplitHeading({
 }
 
 /* ───────────── Brand wordmark ───────────── */
-export function Wordmark({ className, color = "text-leaf" }: { className?: string; color?: string }) {
+export function Wordmark({ className, color = "text-leaf", logoEm = 1.15 }: { className?: string; color?: string; logoEm?: number }) {
   const logo = asset("brand/logo");
   if (logo) {
-    // eslint-disable-next-line @next/next/no-img-element
-    return <img src={logo} alt="زغاليل" className={cn("h-auto w-auto", className)} />;
+    // The official logo is sized in em, so the same font-size classes that size the text fallback size the image.
+    return (
+      <span className={cn("inline-block leading-none", className)}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={logo} alt="زغاليل" draggable={false} className="block w-auto select-none" style={{ height: `${logoEm}em` }} />
+      </span>
+    );
   }
   return (
     <span
