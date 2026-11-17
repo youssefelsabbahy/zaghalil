@@ -68,6 +68,8 @@
   .ptile .txt { flex: 1; min-width: 0; direction: rtl; text-align: right; }
   .ptile .nm { font-family: var(--display); font-weight: 800; color: var(--ink); line-height: 1.05; }
   .ptile .tr { margin-top: 10px; font-weight: 700; font-size: 20px; line-height: 1.5; color: rgba(31,31,31,.7); }
+  .ptile.solo { justify-content: center; padding: 0; }
+  .ptile.solo .pic { width: 78%; filter: drop-shadow(0 14px 18px rgba(0,0,0,.14)); }
   .ptile .zoom { position: absolute; left: 22px; top: 22px; width: 46px; height: 46px; border-radius: 12px; background: rgba(255,255,255,.8); display: grid; place-items: center; }
 
   /* shared bits */
@@ -118,9 +120,21 @@ function badge(c, x, y, size) {
   </g>`;
 }
 
+/** The design's milestone marker (Figma 9-point star, corners fully rounded). */
+const MARK_PATH = "M23.136 7.379A1.923 1.923 0 0 1 26.864 7.379L26.864 7.379A5.168 5.168 0 0 0 34.899 10.303L34.899 10.303A1.923 1.923 0 0 1 37.755 12.699L37.755 12.699A5.168 5.168 0 0 0 42.030 20.104L42.030 20.104A1.923 1.923 0 0 1 42.677 23.776L42.677 23.776A5.168 5.168 0 0 0 41.193 32.196L41.193 32.196A1.923 1.923 0 0 1 39.329 35.425L39.329 35.425A5.168 5.168 0 0 0 32.778 40.921L32.778 40.921A1.923 1.923 0 0 1 29.275 42.196L29.275 42.196A5.168 5.168 0 0 0 20.725 42.196L20.725 42.196A1.923 1.923 0 0 1 17.222 40.921L17.222 40.921A5.168 5.168 0 0 0 10.671 35.425L10.671 35.425A1.923 1.923 0 0 1 8.807 32.196L8.807 32.196A5.168 5.168 0 0 0 7.323 23.776L7.323 23.776A1.923 1.923 0 0 1 7.970 20.104L7.970 20.104A5.168 5.168 0 0 0 12.245 12.699L12.245 12.699A1.923 1.923 0 0 1 15.101 10.303L15.101 10.303A5.168 5.168 0 0 0 23.136 7.379Z";
+const mark = (color, x, y, size) =>
+  `<svg x="${x}" y="${y}" width="${size}" height="${size}" viewBox="6.1 6.1 37.8 37.8"><path d="${MARK_PATH}" fill="${color}"/></svg>`;
+
 /* ───────── art per variant ───────── */
 const art = {
   home(d) {
+    // the official hero illustration (characters on the swing), when exported
+    if (d.heroArt) {
+      return `<svg width="560" height="574" viewBox="0 0 560 574">
+        <image href="${d.heroArt}" x="0" y="40" width="560" height="500" preserveAspectRatio="xMidYMid meet"/>
+        ${spark(70, 70, 1, -20)}${spark(505, 140, 0.8, 25, "#F7953E")}${star4(500, 500, 12)}
+      </svg>`;
+    }
     const seats = d.swing;
     const half = 190, cx = 262, plankY = 400;
     const rope = (x) => `<rect x="${x - 7}" y="-20" width="14" height="${plankY + 26}" fill="url(#rope)" stroke="${INK}" stroke-width="3.5"/>`;
@@ -165,7 +179,9 @@ const art = {
       <path d="M425 120v100M350 170h150" stroke="#E2A35A" stroke-width="7"/>
       <rect x="24" y="396" width="512" height="120" fill="#E8B477"/><rect x="24" y="388" width="512" height="10" fill="#E2A35A"/>
       <rect x="24" y="96" width="512" height="420" rx="36" fill="none" stroke="rgba(0,0,0,.08)" stroke-width="3"/>
-      ${pos.map((p) => badge(p.c, p.x, p.y, size)).join("")}
+      ${d.castArt
+        ? `<image href="${d.castArt}" x="24" y="280" width="512" height="236" preserveAspectRatio="xMidYMax meet"/>`
+        : pos.map((p) => badge(p.c, p.x, p.y, size)).join("")}
       ${spark(70, 80, 1, -20)}${spark(500, 70, .8, 20, "#F7953E")}
     </svg>`;
   },
@@ -175,7 +191,7 @@ const art = {
       const y = 170 + i * 92;
       return `<g>
         <text x="500" y="${y + 13}" text-anchor="end" font-family="Rabie, Baloo" font-weight="800" font-size="40" fill="#fff">${ar(m.year)}</text>
-        <g transform="translate(${381} ${y - 13})">${flower(m.color, 30).replace("<svg", "<svg x='0' y='0'")}</g>
+        ${mark(m.color, 380, y - 16, 32)}
         <text x="364" y="${y + 6}" text-anchor="end" font-family="Rabie, Baloo" font-weight="800" font-size="24" fill="#fff">${esc(m.title)}</text>
         <rect x="${364 - 200}" y="${y + 22}" width="200" height="8" rx="4" fill="rgba(255,255,255,.28)"/>
       </g>`;
@@ -184,7 +200,9 @@ const art = {
       <rect x="24" y="96" width="512" height="420" rx="40" fill="#A874A4"/>
       <path d="M396 150V470" stroke="rgba(255,255,255,.6)" stroke-width="3" stroke-dasharray="7 7"/>
       ${rows}
-      <g transform="translate(40 392)">${badge(d.cast.find((c) => c.id === "zouina") || d.cast[0], 0, 0, 112)}</g>
+      ${d.bunny
+        ? `<image href="${d.bunny}" x="34" y="352" width="128" height="164" preserveAspectRatio="xMidYMax meet"/>`
+        : `<g transform="translate(40 392)">${badge(d.cast.find((c) => c.id === "zouina") || d.cast[0], 0, 0, 112)}</g>`}
       ${spark(80, 80, 1, -20)}${star4(512, 104, 14)}
     </svg>`;
   },
@@ -200,7 +218,9 @@ const art = {
     return `<svg width="560" height="574" viewBox="0 0 560 574">
       <rect x="40" y="100" width="480" height="412" rx="38" fill="#D6ECF2"/>
       <path d="M40 470h480v4a38 38 0 0 1-38 38H78a38 38 0 0 1-38-38Z" fill="#A7D9EC"/>
-      ${card(fan[0], 180, 300, -14, "#F2A3A0")}${card(fan[1], 380, 300, 14, "#CDA6E8")}${card(fan[2], 280, 280, 0, "#A7D9EC")}
+      ${d.shopArt
+        ? `<image href="${d.shopArt}" x="56" y="140" width="448" height="300" preserveAspectRatio="xMidYMid meet"/>`
+        : card(fan[0], 180, 300, -14, "#F2A3A0") + card(fan[1], 380, 300, 14, "#CDA6E8") + card(fan[2], 280, 280, 0, "#A7D9EC")}
       ${spark(84, 92, 1, -20)}${spark(492, 96, .8, 22, "#F7953E")}${star4(488, 470, 13)}
     </svg>`;
   },
@@ -211,6 +231,13 @@ const art = {
     const pic = c.img
       ? `<img src="${c.img}" alt="">`
       : `<svg viewBox="0 0 200 200">${badge({ ...c, img: null }, 0, 0, 200)}</svg>`;
+    if (d.product.photo) {
+      return `<div class="ptile solo" style="background:${c.tile}">
+        <div class="zoom"><svg width="26" height="26" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="${INK}" stroke-width="2.2"/><path d="m20 20-4.4-4.4M10.5 8v5M8 10.5h5" stroke="${INK}" stroke-width="2.2" stroke-linecap="round"/></svg></div>
+        <div class="pic"><img src="${d.product.photo}" alt=""></div>
+      </div>
+      <svg width="560" height="574" viewBox="0 0 560 574" style="position:absolute;inset:0;pointer-events:none">${spark(470, 64, .9, 22, "#F7953E")}${star4(500, 520, 13)}</svg>`;
+    }
     return `<div class="ptile" style="background:${c.tile}">
         <div class="zoom"><svg width="26" height="26" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="${INK}" stroke-width="2.2"/><path d="m20 20-4.4-4.4M10.5 8v5M8 10.5h5" stroke="${INK}" stroke-width="2.2" stroke-linecap="round"/></svg></div>
         <div class="pic">${pic}</div>

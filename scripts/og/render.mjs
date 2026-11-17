@@ -76,16 +76,17 @@ const jobs = [
       highlight: site.hero.titleBrand,
       subtitle: site.hero.body.split(". ")[0] + ".",
       swing: site.swingCast.map((id) => byId[id]),
+      heroArt: asset("scenes/about-hero"),
       perch: byId.otteya,
     },
   },
   {
     file: "characters",
-    data: { ...common, art: "characters", eyebrow: site.charactersPage.crumb, title: site.charactersPage.title, subtitle: site.charactersPage.intro },
+    data: { ...common, art: "characters", eyebrow: site.charactersPage.crumb, title: site.charactersPage.title, subtitle: site.charactersPage.intro, castArt: asset("scenes/contact-cast") },
   },
   {
     file: "about",
-    data: { ...common, art: "about", eyebrow: site.aboutPage.crumb, title: site.aboutPage.title, highlight: "زغاليل!", subtitle: site.aboutPage.lead, milestones: site.story.milestones },
+    data: { ...common, art: "about", eyebrow: site.aboutPage.crumb, title: site.aboutPage.title, highlight: "زغاليل!", subtitle: site.aboutPage.lead, milestones: site.story.milestones, bunny: asset("poses/zouina-sitting") },
   },
   {
     file: "products",
@@ -97,6 +98,7 @@ const jobs = [
       highlight: "زغاليل",
       subtitle: site.shop.categories.map((c) => c.name).join(" · "),
       fan: [byId.qalqas, byId.naanaa, byId.zaghloul],
+      shopArt: asset("shop/stickers"),
     },
   },
   {
@@ -123,6 +125,7 @@ const jobs = [
           oldPrice: p.oldPrice,
           discount: p.oldPrice ? Math.round((1 - p.price / p.oldPrice) * 100) : 0,
           rating: p.rating,
+          photo: asset(`products/${p.id}`),
           character: { ...byId[p.character], img: asset(`products/${p.id}`) ?? byId[p.character].img },
         },
       },

@@ -5,7 +5,30 @@ import { useEffect, useRef, useState } from "react";
 import { useGo } from "@/lib/nav";
 import { story } from "@/content/site";
 import { toArabicDigits } from "@/lib/format";
-import { Button, CharacterArt, Flower, Pill, Reveal, SplitHeading } from "@/components/ui/primitives";
+import { Button, CharacterArt, Pill, Reveal, SplitHeading } from "@/components/ui/primitives";
+
+/**
+ * The design's milestone marker: Figma star (9 points, inner radius 43.6%) with its corners fully
+ * rounded — every corner is an arc tangent to the edges at their midpoints, exactly as Figma clamps it.
+ */
+const BADGE_PATH = "M23.136 7.379A1.923 1.923 0 0 1 26.864 7.379L26.864 7.379A5.168 5.168 0 0 0 34.899 10.303L34.899 10.303A1.923 1.923 0 0 1 37.755 12.699L37.755 12.699A5.168 5.168 0 0 0 42.030 20.104L42.030 20.104A1.923 1.923 0 0 1 42.677 23.776L42.677 23.776A5.168 5.168 0 0 0 41.193 32.196L41.193 32.196A1.923 1.923 0 0 1 39.329 35.425L39.329 35.425A5.168 5.168 0 0 0 32.778 40.921L32.778 40.921A1.923 1.923 0 0 1 29.275 42.196L29.275 42.196A5.168 5.168 0 0 0 20.725 42.196L20.725 42.196A1.923 1.923 0 0 1 17.222 40.921L17.222 40.921A5.168 5.168 0 0 0 10.671 35.425L10.671 35.425A1.923 1.923 0 0 1 8.807 32.196L8.807 32.196A5.168 5.168 0 0 0 7.323 23.776L7.323 23.776A1.923 1.923 0 0 1 7.970 20.104L7.970 20.104A5.168 5.168 0 0 0 12.245 12.699L12.245 12.699A1.923 1.923 0 0 1 15.101 10.303L15.101 10.303A5.168 5.168 0 0 0 23.136 7.379Z";
+
+function Badge({ color, className }: { color: string; className?: string }) {
+  return (
+    <svg viewBox="6.1 6.1 37.8 37.8" className={className} aria-hidden>
+      <path d={BADGE_PATH} fill={color} />
+    </svg>
+  );
+}
+
+/* Shared geometry so the dashed spine always runs through the marker centres. */
+const ROW = "gap-4 sm:gap-6";
+const YEAR_W = "w-[4.2rem] sm:w-[5rem]";
+const MARK = "h-9 w-9 sm:h-11 sm:w-11";
+// right offset of a marker centre = year width + gap + half the marker
+const SPINE_RIGHT = "right-[calc(4.2rem+1rem+1.125rem-1px)] sm:right-[calc(5rem+1.5rem+1.375rem-1px)]";
+const SPINE_TOP = "top-[calc(0.25rem+1.125rem)] sm:top-[calc(0.25rem+1.375rem)]";
+const DASH = "bg-[repeating-linear-gradient(to_bottom,currentColor_0_10px,transparent_10px_20px)]";
 
 export function Story() {
   const go = useGo();
@@ -72,25 +95,29 @@ function MilestoneRow({ m, progress, i, count }: { m: Milestone; progress: Motio
   const t = useTransform(progress, [start, end], [0, 1], { clamp: true });
   const yearX = useTransform(t, [0, 0.6], [60, 0]);
   const yearOpacity = useTransform(t, [0, 0.45], [0, 1]);
-  const flowerScale = useTransform(t, [0.15, 0.55, 0.75], [0, 1.25, 1]);
-  const flowerRotate = useTransform(t, [0.15, 0.75], [-160, 0]);
+  const markScale = useTransform(t, [0.15, 0.55, 0.75], [0, 1.2, 1]);
+  const markRotate = useTransform(t, [0.15, 0.75], [-120, 0]);
+  // the dashed segment down to the next marker draws itself as the next milestone arrives
+  const seg = useTransform(progress, [start + span * 0.6, start + span * 1.2], [0, 1], { clamp: true });
+  const last = i === count - 1;
   const textY = useTransform(t, [0.3, 1], [24, 0]);
   const textOpacity = useTransform(t, [0.3, 0.9], [0, 1]);
   const blur = useTransform(t, [0.3, 0.9], ["blur(6px)", "blur(0px)"]);
-  const glow = useTransform(t, [0.5, 0.8, 1], [0, 1, 0.35]);
 
   return (
-    <li className="relative flex items-start gap-4 sm:gap-6">
-      <motion.span style={{ x: yearX, opacity: yearOpacity }} className="font-display w-[4.2rem] shrink-0 text-[2.1rem] leading-none text-white sm:w-[5rem] sm:text-[2.6rem]">
+    <li className={`relative flex items-start ${ROW}`}>
+      {!last && (
+        <>
+          {/* segment from this marker to the next one (li height + the 3rem list gap) */}
+          <span aria-hidden className={`absolute ${SPINE_RIGHT} ${SPINE_TOP} h-[calc(100%+3rem)] w-[2px] text-white/25 ${DASH}`} />
+          <motion.span aria-hidden style={{ scaleY: seg }} className={`absolute ${SPINE_RIGHT} ${SPINE_TOP} h-[calc(100%+3rem)] w-[2px] origin-top text-white ${DASH}`} />
+        </>
+      )}
+      <motion.span style={{ x: yearX, opacity: yearOpacity }} className={`font-display ${YEAR_W} shrink-0 text-[2.1rem] leading-none text-white sm:text-[2.6rem]`}>
         {toArabicDigits(m.year)}
       </motion.span>
-      <motion.span style={{ scale: flowerScale, rotate: flowerRotate }} className="relative z-10 mt-1 shrink-0">
-        <motion.span
-          aria-hidden
-          style={{ opacity: glow, background: m.color }}
-          className="absolute inset-[-10px] rounded-full blur-md"
-        />
-        <Flower color={m.color} className="relative h-8 w-8" />
+      <motion.span style={{ scale: markScale, rotate: markRotate }} className="relative z-10 mt-1 shrink-0">
+        <Badge color={m.color} className={`block ${MARK}`} />
       </motion.span>
       <motion.div style={{ y: textY, opacity: textOpacity, filter: blur }} className="pt-0.5">
         <h3 className="font-display text-xl text-white sm:text-2xl">{m.title}</h3>
@@ -117,7 +144,6 @@ export function TimelineCard() {
   const settled = useMotionValue(1);
   const p = reduce ? settled : progress;
 
-  const line = useTransform(p, [0.04, 0.88], [0, 1], { clamp: true });
   const bunnyY = useTransform(p, [0, 1], [90, -10]);
   const bunnyRotate = useTransform(p, [0, 0.5, 1], [-8, 4, 0]);
   const hint = useTransform(p, [0, 0.06], [1, 0]);
@@ -125,15 +151,8 @@ export function TimelineCard() {
   return (
     <div ref={track} style={pin ? { height: `calc(${height}px + 160vh)` } : undefined} className="relative">
       <div ref={card} style={pin ? { position: "sticky", top } : undefined}>
-        <div className="grain relative overflow-hidden rounded-[2.2rem] bg-purple px-6 py-12 sm:px-12 lg:px-16 lg:py-16">
+        <div className="grain relative overflow-hidden rounded-[2.2rem] bg-purple px-6 pt-12 pb-[12.5rem] sm:px-12 sm:pb-[14rem] lg:px-16 lg:py-16">
           <div className="relative z-10 lg:w-[68%]">
-            {/* dashed spine: faint track + the part already "drawn" */}
-            <div aria-hidden className="absolute right-[5.4rem] top-4 bottom-4 w-0 border-r-2 border-dashed border-white/25 sm:right-[6.4rem]" />
-            <motion.div
-              aria-hidden
-              style={{ scaleY: line }}
-              className="absolute right-[5.4rem] top-4 bottom-4 w-0 origin-top border-r-2 border-dashed border-white sm:right-[6.4rem]"
-            />
             <ol className="relative space-y-12">
               {story.milestones.map((m, i) => (
                 <MilestoneRow key={m.year} m={m} i={i} count={story.milestones.length} progress={p} />
@@ -143,7 +162,7 @@ export function TimelineCard() {
 
           <motion.div
             style={{ y: bunnyY, rotate: bunnyRotate }}
-            className="pointer-events-none absolute bottom-0 left-4 w-[30%] max-w-[230px] origin-bottom sm:left-10 lg:left-14 lg:w-[20%]"
+            className="pointer-events-none absolute bottom-0 left-6 w-[34%] max-w-[140px] origin-bottom sm:left-10 sm:max-w-[160px] lg:left-14 lg:w-[20%] lg:max-w-[230px]"
           >
             <motion.div animate={{ rotate: [-2, 2, -2] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }} className="origin-bottom">
               <CharacterArt id="zouina" pose="sitting" className="w-full" />
