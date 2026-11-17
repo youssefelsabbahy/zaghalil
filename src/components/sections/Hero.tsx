@@ -77,7 +77,7 @@ export function Hero() {
                 whileHover={{ rotate: [0, -4, 4, -2, 0], transition: { duration: 0.6 } }}
               >
                 <Wordmark logoEm={0.92} className="translate-y-[0.06em]" />
-                <Spark className="absolute -left-[0.62em] top-[0.02em] h-[0.5em] w-[0.5em] -rotate-[38deg] animate-wiggle" />
+                <Spark className="absolute -left-[0.4em] top-[0.04em] h-[0.48em] w-[0.48em] -rotate-[38deg] animate-wiggle" />
               </motion.span>
             </motion.span>
           </h1>
