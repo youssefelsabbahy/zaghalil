@@ -49,8 +49,6 @@ export function Hero() {
 
   return (
     <section id="home" ref={ref} className="relative overflow-hidden pt-20 lg:pt-24">
-      {/* soft sky wash */}
-      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-[85%] bg-[radial-gradient(70%_60%_at_30%_30%,#EAF7FC_0%,rgba(255,255,240,0)_70%)]" />
 
       <div className="relative mx-auto grid max-w-[1240px] items-center gap-2 px-4 sm:px-6 lg:min-h-[calc(100svh-6rem-56px)] lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-6 lg:px-8">
         {/* Copy (start column = right in RTL) */}
