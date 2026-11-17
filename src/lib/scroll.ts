@@ -16,7 +16,8 @@ export function scrollToHash(href: string) {
     instance.start();
     document.documentElement.style.overflow = "";
   }
-  if (instance) instance.scrollTo(el as HTMLElement, { duration: 1.4 }); // html scroll-padding-top (6rem) clears the header
+  // html scroll-padding-top (6rem) clears the header
+  if (instance) instance.scrollTo(el as HTMLElement, { duration: 1.4, easing: (t) => (t < 0.5 ? 8 * t ** 4 : 1 - (-2 * t + 2) ** 4 / 2) });
   else (el as HTMLElement).scrollIntoView({ behavior: "smooth", block: "start" });
   history.replaceState(null, "", href === "#home" ? location.pathname : href);
 }

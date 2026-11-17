@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { nav } from "@/content/site";
@@ -61,11 +61,24 @@ export function Header() {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
+  // Hide while travelling down, stay hidden when the scroll settles, reveal only on a
+  // deliberate scroll up. Distance is accumulated per direction so the tiny deltas of
+  // smooth-scroll deceleration never flip the state.
+  const travel = useRef(0);
   useMotionValueEvent(scrollY, "change", (y) => {
-    const prev = scrollY.getPrevious() ?? 0;
+    const prev = scrollY.getPrevious() ?? y;
+    const delta = y - prev;
     setScrolled(y > 24);
-    setHidden(y > 420 && y > prev + 4 && !menu);
-    if (y < prev - 4) setHidden(false);
+    if (y < 140 || menu) {
+      travel.current = 0;
+      setHidden(false);
+      return;
+    }
+    if (delta === 0) return;
+    if (Math.sign(delta) !== Math.sign(travel.current)) travel.current = 0;
+    travel.current += delta;
+    if (travel.current > 28) setHidden(true);
+    else if (travel.current < -14) setHidden(false);
   });
 
   useEffect(() => lockScroll(menu), [menu]);

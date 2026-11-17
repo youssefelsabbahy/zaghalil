@@ -1,6 +1,7 @@
 "use client";
 import Lenis from "lenis";
 import { usePathname } from "next/navigation";
+import { cancelFrame, frame } from "framer-motion";
 import { useEffect } from "react";
 import { getLenis, registerLenis } from "@/lib/scroll";
 
@@ -9,16 +10,23 @@ export function SmoothScroll() {
 
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const lenis = new Lenis({ lerp: 0.11, wheelMultiplier: 1, smoothWheel: true, syncTouch: false });
+    const lenis = new Lenis({
+      autoRaf: false,
+      // ~1.1s exponential glide: responsive on the first frame, soft landing, no floaty tail.
+      duration: 1.1,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+      wheelMultiplier: 0.9,
+      // Phones keep their native momentum (feels best on touch).
+      syncTouch: false,
+      touchMultiplier: 1,
+    });
     registerLenis(lenis);
-    let raf = 0;
-    const loop = (t: number) => {
-      lenis.raf(t);
-      raf = requestAnimationFrame(loop);
-    };
-    raf = requestAnimationFrame(loop);
+    // Same frame loop as Framer Motion → scroll-linked animations move in lockstep, no jitter.
+    const tick = ({ timestamp }: { timestamp: number }) => lenis.raf(timestamp);
+    frame.update(tick, true);
     return () => {
-      cancelAnimationFrame(raf);
+      cancelFrame(tick);
       lenis.destroy();
       registerLenis(null);
     };

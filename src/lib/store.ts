@@ -4,6 +4,8 @@ import { persist, createJSONStorage } from "zustand/middleware";
 import type { ShopCategoryId } from "@/content/site";
 
 type CartLine = { id: string; qty: number };
+export type Toast = { id: number; text: string; count: number; at: number };
+let toastSeq = 0;
 
 type State = {
   cart: CartLine[];
@@ -12,7 +14,7 @@ type State = {
   searchOpen: boolean;
   shopCategory: ShopCategoryId | null;
   contactPrefill: string;
-  toast: { id: number; text: string } | null;
+  toasts: Toast[];
   add: (id: string) => void;
   setQty: (id: string, qty: number) => void;
   remove: (id: string) => void;
@@ -23,6 +25,7 @@ type State = {
   openCategory: (c: ShopCategoryId | null) => void;
   prefillContact: (text: string) => void;
   notify: (text: string) => void;
+  dismiss: (id: number) => void;
 };
 
 const safeStorage = createJSONStorage(() => {
@@ -50,7 +53,7 @@ export const useStore = create<State>()(
       searchOpen: false,
       shopCategory: null,
       contactPrefill: "",
-      toast: null,
+      toasts: [],
       add: (id) =>
         set((s) => {
           const hit = s.cart.find((l) => l.id === id);
@@ -68,7 +71,17 @@ export const useStore = create<State>()(
       setSearchOpen: (searchOpen) => set({ searchOpen }),
       openCategory: (shopCategory) => set({ shopCategory }),
       prefillContact: (contactPrefill) => set({ contactPrefill }),
-      notify: (text) => set({ toast: { id: Date.now(), text } }),
+      notify: (text) =>
+        set((s) => {
+          const last = s.toasts.at(-1);
+          // Same message again within a moment → bump a counter instead of stacking duplicates.
+          if (last && last.text === text && Date.now() - last.at < 4000) {
+            return { toasts: [...s.toasts.slice(0, -1), { ...last, count: last.count + 1, at: Date.now() }] };
+          }
+          const next = { id: ++toastSeq, text, count: 1, at: Date.now() };
+          return { toasts: [...s.toasts, next].slice(-3) };
+        }),
+      dismiss: (id) => set((s) => ({ toasts: s.toasts.filter((t) => t.id !== id) })),
     }),
     {
       name: "zaghalil-store",
