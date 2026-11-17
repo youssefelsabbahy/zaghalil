@@ -1,7 +1,7 @@
 # زغاليل — Zaghalil landing page
 
 An independent, unofficial implementation of the Zaghalil (زغاليل) website design.
-Arabic, right-to-left.
+Arabic, right-to-left. Live: **https://zaghalil.vercel.app**
 
 ## Credits & copyright
 - **Original design:** [Rana Elabd](https://www.behance.net/ranaelabd1) · [Rahma Gamal](https://www.behance.net/rahmaelabd)
@@ -23,6 +23,9 @@ npm run dev            # http://localhost:3000
 npm run build && npm start
 npm run build:static   # fully static export in ./out (any static host)
 ```
+
+Deployed on Vercel from `main`: every push to `main` ships to production, and other
+branches get preview URLs.
 
 ## Pages
 | Route | Page |

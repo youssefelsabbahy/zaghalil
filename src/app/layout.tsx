@@ -28,7 +28,10 @@ const baloo = localFont({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://youssefelsabbahy.com"),
+  // Vercel sets VERCEL_PROJECT_PRODUCTION_URL (e.g. zaghalil.vercel.app) at build time.
+  metadataBase: new URL(
+    process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : "http://localhost:3000"
+  ),
   // Unofficial implementation. Original design, characters & IP © Rana Elabd and Rahma Gamal.
   authors: [
     { name: "Rana Elabd (original design)", url: "https://www.behance.net/ranaelabd1" },
